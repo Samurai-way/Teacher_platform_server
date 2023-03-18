@@ -1,13 +1,19 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as process from 'process';
+import { User } from './modules/auth/entities/auth.entity';
+import { AuthService } from './modules/auth/service/auth.service';
+import { AuthController } from './modules/auth/controller/auth.controller';
+import { AuthRepository } from './modules/auth/repository/auth.repository';
 
-const repositories = [];
-const services = [];
-const controllers = [];
+const controllers = [AuthController];
+const services = [AuthService];
+const repositories = [AuthRepository];
+const entities = [User];
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([...entities]),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.POSTGRES_HOST,
@@ -15,7 +21,7 @@ const controllers = [];
       username: 'postgres',
       password: 'sa',
       database: process.env.POSTGRES_DB,
-      entities: [],
+      // entities,
       synchronize: true,
       autoLoadEntities: true,
     }),
