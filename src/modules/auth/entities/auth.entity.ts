@@ -5,7 +5,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class User {
   @PrimaryGeneratedColumn()
   @ApiProperty({ example: '1', description: 'User id' })
-  id: string;
+  id: number;
   @ApiProperty({ example: 'user@gmail.com', description: 'User email' })
   @Column()
   email: string;
@@ -15,17 +15,30 @@ export class User {
   @ApiProperty({ example: 'new Date()', description: 'new Date()' })
   @Column()
   createdAt: string;
-  @ApiProperty({ example: '', description: 'EmailConfirmation' })
-  @Column({ type: 'jsonb' })
-  emailConfirmation: {
-    confirmationCode: string;
-    expirationDate: string;
-    isConfirmed: boolean;
-  };
-  @Column({ type: 'jsonb' })
-  banInfo: {
-    isBanned: boolean;
-    banDate: string;
-    banReason: string;
-  };
+  // @ApiProperty({ example: '', description: 'EmailConfirmation' })
+  // @Column({ type: 'jsonb' })
+  // emailConfirmation:  // forayng key
+  // @Column({ type: 'jsonb' })
+  // banInfo: {
+  //   isBanned: boolean;
+  //   banDate: string;
+  //   banReason: string;
+  // };
+}
+
+export class UserTypeFor_DB {
+  constructor(
+    public email: string,
+    public passwordHash: string,
+    public createdAt: string,
+  ) {}
+}
+
+export class UserViewModal {
+  constructor(
+    public id: number,
+    public email: string,
+    public passwordHash: string,
+    public createdAt: string,
+  ) {}
 }
