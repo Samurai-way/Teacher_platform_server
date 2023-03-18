@@ -2,6 +2,10 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as process from 'process';
 
+const repositories = [];
+const services = [];
+const controllers = [];
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -16,7 +20,7 @@ import * as process from 'process';
       autoLoadEntities: true,
     }),
   ],
-  controllers: [],
-  providers: [],
+  controllers,
+  providers: [...services, ...repositories],
 })
 export class AppModule {}
