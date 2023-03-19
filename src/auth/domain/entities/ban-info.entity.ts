@@ -1,13 +1,6 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { ApiProperty } from '@nestjs/swagger';
-import { User } from './auth.entity';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from './user.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity('BanInfo')
 export class BanInfoEntity {
@@ -25,7 +18,7 @@ export class BanInfoEntity {
   // })
   @Column()
   banReason: string;
-  @OneToOne(() => User, (user) => user.banInfoId)
+  @OneToOne(() => User, (user) => user.banInfo)
   // @JoinColumn({ name: 'userId' })
   user: User;
 }

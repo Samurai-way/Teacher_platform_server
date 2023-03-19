@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as process from 'process';
-import { User } from './modules/auth/entities/auth.entity';
-import { AuthService } from './modules/auth/service/auth.service';
-import { AuthController } from './modules/auth/controller/auth.controller';
-import { AuthRepository } from './modules/auth/repository/auth.repository';
-import { BanInfoEntity } from './modules/auth/entities/ban-info.entity';
+import { User } from './auth/domain/entities/user.entity';
+import { AuthService } from './auth/application/auth.service';
+import { AuthController } from './auth/controller/auth.controller';
+import { AuthRepository } from './auth/repository/auth.repository';
+import { BanInfoEntity } from './auth/domain/entities/ban-info.entity';
 
 const controllers = [AuthController];
 const services = [AuthService];

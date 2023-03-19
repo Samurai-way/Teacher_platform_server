@@ -21,9 +21,12 @@ export class User {
   // @ApiProperty({ example: 'new Date()', description: 'new Date()' })
   @Column()
   createdAt: string;
-  @OneToOne(() => BanInfoEntity, (BanInfo) => BanInfo.user)
+  @OneToOne(() => BanInfoEntity, (banInfo) => banInfo.user, {
+    eager: true,
+    cascade: true,
+  })
   @JoinColumn()
-  banInfoId: number;
+  banInfo: BanInfoEntity;
 }
 
 export class UserTypeFor_DB {
