@@ -5,11 +5,12 @@ import { User } from './modules/auth/entities/auth.entity';
 import { AuthService } from './modules/auth/service/auth.service';
 import { AuthController } from './modules/auth/controller/auth.controller';
 import { AuthRepository } from './modules/auth/repository/auth.repository';
+import { BanInfoEntity } from './modules/auth/entities/ban-info.entity';
 
 const controllers = [AuthController];
 const services = [AuthService];
 const repositories = [AuthRepository];
-const entities = [User];
+const entities = [User, BanInfoEntity];
 
 @Module({
   imports: [

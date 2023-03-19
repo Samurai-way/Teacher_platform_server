@@ -1,16 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User, UserTypeFor_DB, UserViewModal } from '../entities/auth.entity';
+import { User, UserViewModal } from '../entities/auth.entity';
+import { BanInfoEntity } from '../entities/ban-info.entity';
 
 @Injectable()
 export class AuthRepository {
-  constructor(@InjectRepository(User) private db: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private db: Repository<User>,
+    @InjectRepository(BanInfoEntity)
+    private banInfoRepository: Repository<BanInfoEntity>,
+  ) {}
 
-  async createUser(newUser: UserTypeFor_DB): Promise<UserViewModal> {
-    return this.db.save(newUser);
+  async createUser(banInfo: BanInfoEntity, userForDb: User) {
+    const res = await this.banInfoRepository.save(banInfo);
+    userForDb.banInfoId = res.id;
+    return this.db.save(userForDb);
   }
-
+  async getUsers() {
+    return this.db.find({ relations: ['banInfoId'] });
+  }
   async findUserByEmail(email): Promise<UserViewModal> {
     return this.db.findOneBy({ email });
   }

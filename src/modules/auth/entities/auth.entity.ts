@@ -1,29 +1,29 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { ApiProperty } from '@nestjs/swagger';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { BanInfoEntity } from './ban-info.entity';
 
-@Entity()
+@Entity('User')
 export class User {
   @PrimaryGeneratedColumn()
-  @ApiProperty({ example: '1', description: 'User id' })
+  // @ApiProperty({ example: '1', description: 'User id' })
   id: number;
-  @ApiProperty({ example: 'user@gmail.com', description: 'User email' })
+  // @ApiProperty({ example: 'user@gmail.com', description: 'User email' })
   @Column()
   email: string;
-  @ApiProperty({ example: 'uuid()', description: 'passwordHash for password' })
+  // @ApiProperty({ example: 'uuid()', description: 'passwordHash for password' })
   @Column()
   passwordHash: string;
-  @ApiProperty({ example: 'new Date()', description: 'new Date()' })
+  // @ApiProperty({ example: 'new Date()', description: 'new Date()' })
   @Column()
   createdAt: string;
-  // @ApiProperty({ example: '', description: 'EmailConfirmation' })
-  // @Column({ type: 'jsonb' })
-  // emailConfirmation:  // forayng key
-  // @Column({ type: 'jsonb' })
-  // banInfo: {
-  //   isBanned: boolean;
-  //   banDate: string;
-  //   banReason: string;
-  // };
+  @OneToOne(() => BanInfoEntity, (BanInfo) => BanInfo.user)
+  @JoinColumn()
+  banInfoId: number;
 }
 
 export class UserTypeFor_DB {
