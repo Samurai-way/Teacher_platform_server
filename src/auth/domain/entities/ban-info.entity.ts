@@ -1,5 +1,5 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 import { Exclude } from 'class-transformer';
 
 @Entity('BanInfo')
@@ -18,9 +18,9 @@ export class BanInfoEntity {
   // })
   @Column()
   banReason: string;
-  @OneToOne(() => User, (user) => user.banInfo)
+  @OneToOne(() => UserEntity, (user) => user.banInfo)
   // @JoinColumn({ name: 'userId' })
-  user: User;
+  user: UserEntity;
 }
 
 export class BanInfoFor_DB {

@@ -1,26 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User, UserViewModal } from '../domain/entities/user.entity';
+import { UserEntity, UserViewModal } from '../domain/entities/user.entity';
 import { BanInfoEntity } from '../domain/entities/ban-info.entity';
 
 @Injectable()
 export class AuthRepository {
   constructor(
-    @InjectRepository(User) private db: Repository<User>,
+    @InjectRepository(UserEntity) private userColumn: Repository<UserEntity>,
     @InjectRepository(BanInfoEntity)
-    private banInfoRepository: Repository<BanInfoEntity>,
+    private banInfoColumn: Repository<BanInfoEntity>,
   ) {}
 
-  async createUser(banInfo: BanInfoEntity, userForDb: User) {
-    await this.banInfoRepository.save(banInfo);
-    await this.db.save(userForDb);
-    return true;
+  async createUser(email: string, passwordHash: string): Promise<UserEntity> {
+    const newUser = UserEntity.create(email, passwordHash);
+    return this.userColumn.save(newUser);
   }
 
   async getUsers() {
     return (
-      this.db
+      this.userColumn
         .createQueryBuilder('user')
         .leftJoinAndSelect('user.banInfo', 'banInfo')
         // .select([
@@ -39,13 +38,13 @@ export class AuthRepository {
   }
 
   async findUserByEmail(email): Promise<UserViewModal> {
-    return this.db.findOneBy({ email });
+    return this.userColumn.findOneBy({ email });
   }
 
   async createIsBanned(id: number, toggle: boolean) {
-    const user = await this.db.findOneBy({ id });
+    const user = await this.userColumn.findOneBy({ id });
     user.banInfo.isBanned = toggle;
-    await this.db.save(user);
-    return this.db.findOneBy({ id });
+    await this.userColumn.save(user);
+    return this.userColumn.findOneBy({ id });
   }
 }

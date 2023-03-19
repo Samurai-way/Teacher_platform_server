@@ -1,19 +1,23 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as process from 'process';
-import { User } from './auth/domain/entities/user.entity';
+import { UserEntity } from './auth/domain/entities/user.entity';
 import { AuthService } from './auth/application/auth.service';
-import { AuthController } from './auth/controller/auth.controller';
+import { AuthController } from './auth/auth.controller';
 import { AuthRepository } from './auth/repository/auth.repository';
 import { BanInfoEntity } from './auth/domain/entities/ban-info.entity';
+import { CqrsModule } from '@nestjs/cqrs';
+import { RegistrationUseCase } from './auth/application/use-cases/registration-use-case';
 
 const controllers = [AuthController];
 const services = [AuthService];
 const repositories = [AuthRepository];
-const entities = [User, BanInfoEntity];
+const entities = [UserEntity, BanInfoEntity];
+const useCases = [RegistrationUseCase];
 
 @Module({
   imports: [
+    CqrsModule,
     TypeOrmModule.forFeature([...entities]),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -22,12 +26,11 @@ const entities = [User, BanInfoEntity];
       username: 'postgres',
       password: 'sa',
       database: 'Users',
-      // entities: [User],
       synchronize: true,
       autoLoadEntities: true,
     }),
   ],
   controllers,
-  providers: [...services, ...repositories],
+  providers: [...useCases, ...services, ...repositories],
 })
 export class AppModule {}
